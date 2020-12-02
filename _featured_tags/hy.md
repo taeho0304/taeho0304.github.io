@@ -1,7 +1,7 @@
 ---
 layout: list
 title: 개발 공부 정리
-slug: hydejack
+slug: CS
 menu: true
 # order: 2
 # description: >
