@@ -1,0 +1,268 @@
+I"!0<h2 id="cpu-스케줄링-chapter-5-cpu-scheduling-part-1">CPU 스케줄링: Chapter 5. CPU Scheduling (Part 1)</h2>
+
+<h2 id="cpu-스케줄링-기본-개념">CPU 스케줄링 기본 개념</h2>
+
+<h4 id="cpu-스케줄링이란">CPU 스케줄링이란?</h4>
+
+<p>컴퓨터 자원을 효율적으로 관리하기 위해 프로세스들 사이에서 CPU 할당을 위한 우선순위를 관리하는 일이다.
+다중 프로그래밍에서 어떤 프로세스가 대기해야 할 경우, 운영체제는 CPU를 그 프로세스로부터 회수해 다른 프로세스에 할당한다.</p>
+
+<h4 id="cpu-입출력-버스트-사이클cpu-io-burst-cycle">CPU-입출력 버스트 사이클(CPU-I/O Burst Cycle)</h4>
+
+<p>프로세스 실행은 CPU 명령을 실행하는 CPU burst time(주로 running 상태)과 I/O를 요청하고 기다리는 I.O busrt time(주로 wating, ready 상태)의 사이클로 구성된다.
+입출력 중심의 프로그램은 전형적으로 짧은 CPU 버스트를 많이 가진다. CPU 지향 프로그램은 다수의 긴 CPU 버스트를 가질 수 있다. 이러한 분포는 적절한 CPU 스케줄링 알고리즘을 선택하는 데 매우 중요하다.</p>
+
+<h4 id="선점-스케줄링preemptive-scheduling">선점 스케줄링(Preemptive Scheduling)</h4>
+
+<p>선점 스케줄링은 운영체제가 강제로 프로세스의 사용권을 통제하는 방식이고, 비선점 스케줄링은 프로세스가 스스로 다음 프로세스에게 자리를 넘겨주는 방식이다. 즉, 선점 스케줄링 방식에서는 CPU에 프로세스가 할당되어 있을 때도 운영체제가 개입해 다른 프로세스에게 CPU를 할당할 수 있다.</p>
+
+<p><strong>1. 스킴 : 사용할 프로토콜</strong></p>
+
+<ul>
+  <li>주어진 리소스에 어떻게 접근하는지 알려주는 중요한 정보</li>
+  <li>알파벳으로 시작해야하고 URL의 나머지 부분들과 첫번째 ‘:’문자로 구분</li>
+  <li>대소문자를 가리지 X</li>
+</ul>
+
+<p><strong>2. 호스트와 포트</strong></p>
+
+<ul>
+  <li>리소스를 호스팅하고 있는 장비와 그 장비 내에서 리소스에 접글할 수 있는 서버의 위치 정보 제공</li>
+  <li>호스트 컴포넌트 접근하려고 하는 리소스를 가지고 있는 인터넷상의 호스트 장비를 가리킴</li>
+  <li>아래의 첫 번째는 호스트명으로, 두 번째는 IP 주소로같은 리소스를 기리킴
+    <blockquote>
+      <p>http://www.joes-hardware.com:80/index.html</p>
+
+      <p>http://161.58.228.45:80/index.html</p>
+    </blockquote>
+  </li>
+  <li>포트 컴포넌트는 서버가 열어놓은 네트워크 포트를 가리킴 - 내부적으로 TCP 프로토콜을 사용하는 HTTP는 기본 포트로 80을 사용</li>
+</ul>
+
+<p><strong>3. 사용자 이름과 비밀번호</strong></p>
+
+<ul>
+  <li>많은 서버가 자신이 가지고 있는 데이터에 접근을 허용하기 전에 사용자 이름과 비밀번호를 요구</li>
+  <li>’@’ 문자는 URL로부터 사용자 이름과 비밀번호 컴포넌트를 분리
+    <blockquote>
+      <p>ftp://ftp.prep.ai.mit.edu/pub/gnu - 이름, 비밀번호 없음</p>
+
+      <p>ftp://<strong>anonymous:my_passwd</strong>@ftp.prep.ai.mit.edu/pub/gnu - 이름, 비밀번호 있음</p>
+    </blockquote>
+  </li>
+</ul>
+
+<p><strong>4. 경로</strong></p>
+
+<ul>
+  <li>서버 내 리소스의 위치 정보 제공</li>
+  <li>계층적 파일 시스템 경로와 유사한 구조를 가짐</li>
+  <li>’/’문자를 기준으로 경로조각으로 나뉘게 되며, 각 경로조각은 자체만의 파라미터 컴포넌트를 가질 수 있음</li>
+</ul>
+
+<p><strong>5. 파라미터</strong></p>
+
+<ul>
+  <li>애플리케이션이 서버에 정확한 요청을 하기 위해 필요한 입력 파라미터를 받는데 사용</li>
+  <li>이름/값 쌍의 리스트로 URL 나머지 부분들로부터 ‘;’문자로 구분하여 URL에 기술
+    <blockquote>
+      <p>http://www.joe-hardware.com/hammers;sale=false/index.html;graphics=true</p>
+    </blockquote>
+  </li>
+  <li>HTTP URL에서의 경로 컴포넌트는 경로조각으로 나눌 수 있고, 각 조각은 자체 파라미터를 가질 수 있다</li>
+  <li>위의 URL에서 hammers 경로조각은 값이 false인 slae이라는 파라미터를, index.html 경로조각은 값이 ture인 grapgics란 파라미터를 가짐</li>
+</ul>
+
+<p><strong>6. 질의 문자열</strong></p>
+
+<ul>
+  <li>데이터베이스 같은 서비스들은 요청받을 리소스 형식의 범위를 좁히기 위해서 질문이나 질의를 받을 수 있음</li>
+  <li>URL의 질의 컴포넌트는 게이트웨이를 가리키는 URL의 경로 컴포넌트와 함께 전달
+    <blockquote>
+      <p>http://www.joes-hardware.com/inventory-check.cgi?item=12731&amp;color=blue</p>
+    </blockquote>
+  </li>
+  <li>편의상 많은 게이트웨이가 ‘&amp;’로 나뉜 ‘이름=값’쌍 형식의 질의 문자열을 원함</li>
+  <li>위의 예에는 item=12731과 color=blue 두 개의 질의 컴포넌트가 존재 - 제품번호가 12731이고, 파란색인 물품의 재고가 있는지 검사</li>
+</ul>
+
+<p><strong>7. 프래그먼트</strong></p>
+
+<ul>
+  <li>리소스의 특정 부분을 가리킬 수 있음</li>
+  <li>HTTP 서버는 객체 일부가 아닌 전체만 다루기 때문에, 클라이언트는 서버에 프래그먼트를 전달하지 않음 -&gt; 전체 리소스를 내려받은 후, 프래그먼트를 사용하여 리소스의 일부를 보여주는 방식</li>
+  <li>프래그먼트는 URL의 오른쪽에 # 문자에 이어서 존재
+    <blockquote>
+      <p>http://www,joes-hardware.com/tools.html<strong>#drils</strong></p>
+    </blockquote>
+  </li>
+</ul>
+
+<h3 id="23-단축-url">2.3 단축 URL</h3>
+
+<h4 id="231-상대-url">2.3.1 상대 URL</h4>
+
+<ul>
+  <li>URL을 짧게 표기하는 방식</li>
+  <li>상대 URL로 리소스에 접근하는데 필요한 모든 정보를 얻기 위해서는, 기저(base)라고 하는 URL을 사용해아 함</li>
+  <li>상대 URL 문법에 따르면, URL에 스킴과 호스트, 그리고 다른 컴포넌트들을 모두 입력하지 않아도 됨 ( 기저 URL을 통해 파악 가능 )</li>
+</ul>
+
+<h4 id="232-url-확장">2.3.2 URL 확장</h4>
+
+<ul>
+  <li>특정 브라우저들은 URL을 입력한 다음이나 입력하고 있는 동안 자동으로 URL을 확장해 사용자가 URL을 빠르게 입력할 수 있게 도와줌</li>
+</ul>
+
+<ol>
+  <li>호스트명 확장</li>
+</ol>
+
+<ul>
+  <li>주소 입력란에 ‘naver’를 입력하면, 브라우저는 호스트 명에 자동으로 ‘www.’와 ‘.com’을 붙여서 ‘www.naver.com’을 만듬</li>
+  <li>사용자의 시간을 절약하고 혼란을 막아주지만, 프락시와 같은 다른 HTTP 애프리케이션에 문제를 발생시킬 수 있음 (6장 상세)</li>
+</ul>
+
+<ol>
+  <li>히스토리 확장</li>
+</ol>
+
+<ul>
+  <li>‘http://nav’와 같이 이전에 방문했던 URL의 시작 부분 입력 시, ‘http://naver.com’을 표시</li>
+  <li>프락시를 사용할 경우 URL 자동확장 기능은 다르게 동작할 수 있음</li>
+</ul>
+
+<h3 id="24-안전하지-않은-문자">2.4 안전하지 않은 문자</h3>
+
+<ul>
+  <li>안전한 전송 - 정보가 유실될 위험 없이 URL을 전송할 수 있다는 것</li>
+  <li>전자메일에 사용되는 SMTP와 같이 특정 문자를 제거할 수도 있는 전송 방식을 사용하는 프로토콜의 경우, URL에 상대적으로 작고 일반적으로 안전한 알파벳 문자만 포함하도록 허락</li>
+  <li>출력이 되지 않거나 보이지 않는 문자들을 사용하는 것은 금지됨</li>
+  <li>이스케이프라는 기능을 통해 안전하지 않은 문자를 안전한 문자로 인코딩 가능</li>
+</ul>
+
+<h4 id="241-url-문자-집합">2.4.1 URL 문자 집합</h4>
+
+<ul>
+  <li>많은 컴퓨터 애플리케이션이 US-ASCII 문자 집합을 사용</li>
+  <li>US-ASCII는 적은 수의 문자만을 포함하고 있어 표현 가능한 언어의 수가 적음</li>
+  <li>URL이 특정 이진 데이터를 포함해야 하는 경우가 존재</li>
+  <li>위의 문제를 해결하기 위해 URL에 이스케이프 문자열을 쓸 수 있게 설꼐
+    <ul>
+      <li>이스케이프 문자열은 US-ASCII에서 사용이 금지된 문자들로, 특정 문자나 데이터를 인코딩할 수 있게하여 이동성과 완성도를 높임</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="242-인코딩-체계">2.4.2 인코딩 체계</h4>
+
+<ul>
+  <li>안전하지 않은 문자를 퍼센티치 기호(%)로 시작해, ASCII 코드로 표현되는 두 개의 16진수 숫자로 이루어진 ‘이스케이프’문자로 변환</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">문자</th>
+      <th style="text-align: left">ASCII 코드</th>
+      <th style="text-align: left">URL의 예</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">~</td>
+      <td style="text-align: left">126 (0x7E)</td>
+      <td style="text-align: left">http://github.taeho0304.io/%7Etaeho</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">빈문자</td>
+      <td style="text-align: left">32 (0x20)</td>
+      <td style="text-align: left">http://github.taeho0304.io/more%20about.html</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">%</td>
+      <td style="text-align: left">37 (0x25)</td>
+      <td style="text-align: left">http://github.taeho0304.io/100%25</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="243-문자제한">2.4.3 문자제한</h4>
+
+<ul>
+  <li>몇몇 문자는 URL 내에서 특별한 의미로 예약되어 있음</li>
+  <li>URL에서 예약된 문자들을 본래의 목적이 아닌 다른 용도로 사용하려면, 그전에 반드시 인코딩해야 함</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">문자</th>
+      <th style="text-align: left">선점 및 제한</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">%</td>
+      <td style="text-align: left">인코딩된 문자에 사용할 이스케이프 토큰으로 선점</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">/</td>
+      <td style="text-align: left">경로 컴포넌트에 있는 경로 세그먼트를 나누는 용도로 선점</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">.</td>
+      <td style="text-align: left">경로 컴포넌트에서 선점</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">..</td>
+      <td style="text-align: left">경로 컴포넌트에서 선점</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">#</td>
+      <td style="text-align: left">프래그먼트의 구획 문자로 선점</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">?</td>
+      <td style="text-align: left">질의 문자열의 구획 문자로 선점</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">;</td>
+      <td style="text-align: left">파라미터의 구획 문자로 선점</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">:</td>
+      <td style="text-align: left">스킴, 사용자 이름/비밀번호, 호스트/포트의 구획 문자로 선점</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="25-스킴의-바다">2.5 스킴의 바다</h3>
+
+<ul>
+  <li>웹에서 쓰이는 스킴들 ( 종류는 많지만 대표적인 3개만 정리)</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">스킴</th>
+      <th style="text-align: left">설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">http</td>
+      <td style="text-align: left">일반 URL 포맷을 지키는 하이퍼텍스트 전송 프로토콜로 기본 포트값은 80이다</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">https</td>
+      <td style="text-align: left">http 스킴과 거의 같다. 차이점은 HTTP의 커넥션의 양 끝단에서 암호화하기 위해 넷스케이프에서 개발한 보안 소켓 계층(Secure Sockets Layer, SSL)을 사용한다. 기본 포트값은 443이다.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">ftp</td>
+      <td style="text-align: left">FTP 서버에 있는 파일을 올리거나 내리고, FTP 서버 디렉토리의 콘텐츠 목록을 가져오는데 사용</td>
+    </tr>
+  </tbody>
+</table>
+:ET
