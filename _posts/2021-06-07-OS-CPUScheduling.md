@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 5.CPU Scheduling
+title: CPU 스케줄링 (Part 1)
 description: >
   [공룡책 정리] CPU 스케줄링: Chapter 5. CPU Scheduling (Part 1)
 tags: [OS]
