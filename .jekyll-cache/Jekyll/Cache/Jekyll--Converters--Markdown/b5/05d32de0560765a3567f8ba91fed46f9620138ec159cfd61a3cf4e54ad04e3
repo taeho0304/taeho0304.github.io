@@ -1,0 +1,259 @@
+I"�+<h2 id="cpu-스케줄링-chapter-5-cpu-scheduling-part-2">CPU 스케줄링: Chapter 5. CPU Scheduling (Part 2)</h2>
+
+<h2 id="cpu-스케줄링-알고리즘">CPU 스케줄링 알고리즘</h2>
+
+<h3 id="선입-선처리-스케줄링first-come-first-served-scheduling">선입 선처리 스케줄링(First-Come, First-Served Scheduling)</h3>
+
+<p>비선점 스케줄링 방식으로 CPU를 먼제 요청하는 프로세스를 우선적으로 할당하는 방식이다. FIFO 큐를 사용해 쉽게 관리할 수 있다. 가장 간단한 CPU 스케줄링 기법이지만 현재에는 거의 사용되지 않는 스케줄링 기법이다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Process</th>
+      <th style="text-align: left">Burst time</th>
+      <th style="text-align: left">Trunaround time</th>
+      <th style="text-align: left">Waiting time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">P1</td>
+      <td style="text-align: left">24</td>
+      <td style="text-align: left">24</td>
+      <td style="text-align: left">0</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">P2</td>
+      <td style="text-align: left">3</td>
+      <td style="text-align: left">27</td>
+      <td style="text-align: left">24</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">P3</td>
+      <td style="text-align: left">3</td>
+      <td style="text-align: left">30</td>
+      <td style="text-align: left">27</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><img src="https://taeho0304.github.io/assets/img/OS/fcfs.PNG" alt="" /></p>
+
+<p>총 대기시간 : ( 0 + 24 + 27 ) = 51
+평균 대기시간 : 51 / 3 =17</p>
+
+<p>모든 다른 프로세스들이 하나의 긴 프로세스가 CPU를 양도하기를 기다리는 것을 호위 효과(convoy effect)라고 한다. 이 효과는 짧은 프로세스들이 먼저 처리되도록 허용될 때보다 CPU와 장치 이용률이 저하되는 결과를 낳는다.</p>
+
+<h3 id="최단-작업-우선-스케줄링-shortest-job-first-scheduling">최단 작업 우선 스케줄링 (Shortest-Job-First Scheduling)</h3>
+
+<p>CPU burst 길이가 짧은 순서대로 할당하는 방식이다. 최적의 알고리즘이지만 다음 CPU burst 길이를 알 수 있는 방법이 없어 근사적인 값을 활용해 구현한다.(앞서 처리한 프로세스들의 기록을 보고 추측한다.)</p>
+
+<p>SJF 알고리즘은 선점형이거나 또는 비선점형일 수 있다. 앞의 프로세스가 실행되는 동안 새로운 프로세스가 Ready Queue에 도착하면 선택이 발생한다. 새로운 프로세스가 현재 실행되고 있는 프로세스의 남은 시간보다도 더 짧은 CPU burst를 가질 수 있다. 선점형 SJF 알고리즘은 현재 실행하는 프로세스를 선점할 것이고 반면에 비선점형 SJF 알고리즘은 현재 실행하고 있는 프로세스가 자신의 CPU 버스트를 끝내도록 허용한다. 선점형 SJF 알고리즘은 <strong>최소 잔여 시간 우선 스케줄링(shortest remaining time first)</strong>이라고 불립니다.</p>
+
+<p>비선점형일 경우 CPU burst 시간이 큰 프로세스는 계속 뒤로 밀려나는 기아(Starvation)가 발생한다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Process</th>
+      <th style="text-align: left">Burst time</th>
+      <th style="text-align: left">Trunaround time</th>
+      <th style="text-align: left">Waiting time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">P1</td>
+      <td style="text-align: left">6</td>
+      <td style="text-align: left">9</td>
+      <td style="text-align: left">3</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">P2</td>
+      <td style="text-align: left">8</td>
+      <td style="text-align: left">24</td>
+      <td style="text-align: left">16</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">P3</td>
+      <td style="text-align: left">7</td>
+      <td style="text-align: left">16</td>
+      <td style="text-align: left">9</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">P4</td>
+      <td style="text-align: left">3</td>
+      <td style="text-align: left">3</td>
+      <td style="text-align: left">0</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><img src="https://taeho0304.github.io/assets/img/OS/sjf.PNG" alt="" /></p>
+
+<p>총 대기시간 : ( 3 + 16 + 9 + 0 ) = 28
+평균 대기시간 : 28 / 4 =7</p>
+
+<h3 id="최소-잔여-시간-우선-스케줄링shortest-remaining-time-first">최소 잔여 시간 우선 스케줄링(shortest remaining time first)</h3>
+
+<p>프로세스의 남은 수행 시간이 짧은 순서에 따라 프로세서에 할당하는 방식으로, 수행 중 다른 프로세스보다 남은 수행 시간이 적어지면 운영체제가 개입해 자리를 바꾸는 선점 스케줄링 방식이다.</p>
+
+<p>평균 대기 시간이 가장 짧은 알고리즘이지만 기본적으로 선점형 방식이기 때문에 잦은 문맥교환이 일어나고 그에 따른 오버헤드가 커질 수 있다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Process</th>
+      <th style="text-align: left">Arrival time</th>
+      <th style="text-align: left">Burst time</th>
+      <th style="text-align: left">Trunaround time</th>
+      <th style="text-align: left">Waiting time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">P1</td>
+      <td style="text-align: left">0</td>
+      <td style="text-align: left">8</td>
+      <td style="text-align: left">17</td>
+      <td style="text-align: left">9 ( 10 - 1 )</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">P2</td>
+      <td style="text-align: left">1</td>
+      <td style="text-align: left">4</td>
+      <td style="text-align: left">4</td>
+      <td style="text-align: left">0 ( 1 - 1 )</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">P3</td>
+      <td style="text-align: left">2</td>
+      <td style="text-align: left">9</td>
+      <td style="text-align: left">26</td>
+      <td style="text-align: left">15 ( 17 - 2 )</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">P4</td>
+      <td style="text-align: left">3</td>
+      <td style="text-align: left">5</td>
+      <td style="text-align: left">7</td>
+      <td style="text-align: left">2 ( 5 - 3 )</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><img src="https://taeho0304.github.io/assets/img/OS/srtf.PNG" alt="" /></p>
+
+<p>총 대기시간 : ( 9 + 0 + 15 + 2 ) = 26
+평균 대기시간 : 26 / 4 =6.5 ( * 똑같은 데이터로 SJF 스케줄링 수행 시 7.75)</p>
+
+<h3 id="라운드-로빈-스케줄링-round---roubin-scheduling-">라운드 로빈 스케줄링( Round - Roubin Scheduling )</h3>
+
+<p>프로세스에게 각각 동일한 CPU 할당 시간(타임 슬라이스, quantum)을 부여해서 이 시간 동안만 CPU를 할당한다. 선점형 방식을 사용해 할당 시간동안 처리를 다 하지 못하면 CPU를 빼앗고 다음 프로세스에게 넘긴다. 주로 원형 큐를 이용해 구현하고 빼앗긴 프로세스는 준비 큐의 맨 뒤로 간다.</p>
+
+<p>따로 CPU 처리 시간을 계산하지 않아도 돼서 선점형 방식의 가장 단순하고 대표적인 방법이다. 우선 순위도 없기 때문에 매우 공평하다.</p>
+
+<p>라운드 로빈 알고리즘의 경우, 만약 할당 시간이 q고 대기 중인 프로세스가 n개라면 어떤 프로세스도 (n-1)q 이상을 기다리지 않아도 된다. 이는 곧 모든 프로세스가 최초 응답 시간을 빠르게 보장받을 수 있다는 큰 장점을 가지게 된다.</p>
+
+<p>타임 퀀텀을 얼마로 설정하냐에 따라 OS의 스케줄링 성능이 좌지우지된다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Process</th>
+      <th style="text-align: left">Burst time</th>
+      <th style="text-align: left">Trunaround time</th>
+      <th style="text-align: left">Waiting time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">P1</td>
+      <td style="text-align: left">24</td>
+      <td style="text-align: left">30</td>
+      <td style="text-align: left">6 ( 10 - 4 )</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">P2</td>
+      <td style="text-align: left">3</td>
+      <td style="text-align: left">7</td>
+      <td style="text-align: left">4</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">P3</td>
+      <td style="text-align: left">3</td>
+      <td style="text-align: left">10</td>
+      <td style="text-align: left">7</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>timequantum : 4</p>
+
+<p><img src="https://taeho0304.github.io/assets/img/OS/rr.PNG" alt="" /></p>
+
+<p>총 대기시간 : ( 6 + 4 + 7 ) = 17
+평균 대기시간 : 17 / 3 = 5.66</p>
+
+<p>라운드 로빈방식만 사용하면 대기시간이 길어질 수 있지만 후에 이를 SJF와 함께 사용하면 유용학게 사용할 수 있다.</p>
+
+<h3 id="우선순위-스케줄링-priority-scheduling-">우선순위 스케줄링( Priority Scheduling )</h3>
+
+<p>특정 기준으로 프로세스에게 우선순위를 부여해 우선순위에 따라 프로세서에 할당한다. 우선순위를 정하는 기준으로는 위에서 언급한 SJF, SRTF 알고리즘 등이 있고, 우선순위가 같은 프로세스들은 FCFS 순서로 스케줄 된다.</p>
+
+<p>프로세스를 에이징(Aging)해서 오래 대기한 프로세스의 우선순위를 높이는 방식을 사용해 기아 문제를 어느정도 해결할 수 있다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Process</th>
+      <th style="text-align: left">Priority</th>
+      <th style="text-align: left">Burst time</th>
+      <th style="text-align: left">Trunaround time</th>
+      <th style="text-align: left">Waiting time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">P1</td>
+      <td style="text-align: left">3</td>
+      <td style="text-align: left">10</td>
+      <td style="text-align: left">16</td>
+      <td style="text-align: left">6</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">P2</td>
+      <td style="text-align: left">1</td>
+      <td style="text-align: left">1</td>
+      <td style="text-align: left">1</td>
+      <td style="text-align: left">0</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">P3</td>
+      <td style="text-align: left">4</td>
+      <td style="text-align: left">2</td>
+      <td style="text-align: left">18</td>
+      <td style="text-align: left">16</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">P4</td>
+      <td style="text-align: left">5</td>
+      <td style="text-align: left">1</td>
+      <td style="text-align: left">19</td>
+      <td style="text-align: left">18</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">P5</td>
+      <td style="text-align: left">2</td>
+      <td style="text-align: left">5</td>
+      <td style="text-align: left">6</td>
+      <td style="text-align: left">1</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><img src="https://taeho0304.github.io/assets/img/OS/priority.PNG" alt="" /></p>
+
+<p>총 대기시간 : ( 6 + 0 + 16 + 18 + 1 ) = 41
+평균 대기시간 : 17 / 3 = 8.2</p>
+:ET
