@@ -1,4 +1,4 @@
-I"l<h2 id="cpu-스케줄링-chapter-5-cpu-scheduling-part-1">CPU 스케줄링: Chapter 5. CPU Scheduling (Part 1)</h2>
+I"o<h2 id="cpu-스케줄링-chapter-5-cpu-scheduling-part-1">CPU 스케줄링: Chapter 5. CPU Scheduling (Part 1)</h2>
 
 <h2 id="cpu-스케줄링-기본-개념">CPU 스케줄링 기본 개념</h2>
 
@@ -25,7 +25,7 @@
   <li>프로세스가 종료할 때</li>
 </ol>
 
-<p>1번 입출력 요청이 발생해 자발으로 waiting 상태로 가거나, 4번 프로세스가 끝나 main함수를 return 하거나 exit를 호출해 terminate 상태로 가는 경우는 비선점 방식을 사용한다.
+<p>1번 입출력 요청이 발생해 자발적으로 waiting 상태로 가거나, 4번 프로세스가 끝나 main함수를 return 하거나 exit를 호출해 terminate 상태로 가는 경우는 비선점 방식을 사용한다.
 2번과 3번의 경우 선점과 비선점 방식을 선택할 수 있지만 현대 os의 경우 대부분 선택 폭이 넓고 효율을 높일 수 있는 선점 스케줄링 방식을 사용한다고 한다.</p>
 
 <h4 id="디스패처dispatcher">디스패처(Dispatcher)</h4>
