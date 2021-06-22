@@ -56,7 +56,7 @@ CPU에서 나오는 모든 주소는 **페이지 번호(p)**와 페이지 변위
 
 #### 공유페이지
 
-![](https://taeho0304.github.io/assets/img/OS/Paging/protection.png)
+![](https://taeho0304.github.io/assets/img/OS/Paging/share.png)
 
 페이징 기법을 사용하면 코드를 쉽게 공유할 수 있다. 실행 중 절대로 변하지 않는 **재진입 가능 코드(reentrant code)**두 개나 그 이상의 processor들이 동시에 같은 코드를 수행할 수 있다. 같은 코드를 실행시키지만 읽기만 하기 때문에 동기화나 데드락같은 문제가 발생하지 않는다.
 
