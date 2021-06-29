@@ -13,7 +13,7 @@ tags: [Network]
 
 애플리케이션 구조는 개발자에 의해 설계되고 애플리케이션이 다양한 종단 시스템(end system)에서 어떻게 조직되어야 하는지를 지시한다. 현대 개발자는 주로 **클라이언트 서버 구조(client-server architecture)** 또는 **P2P 구조**를 이용해 개발을 진행한다.
 
-![](https://taeho0304.github.io/assets/img/NW/application/principle/mailsystem.png)
+![](https://taeho0304.github.io/assets/img/NW/application/principle/architecture.png)
 
 **클라이언트 서버 구조(client-server architecture)**에서 항상 켜져 있는 호스트를 서버(server)라고 한다. 대표적인 예시로 웹 서버가 있다. 웹 서버는 클라이언트 호스트로부터 객체를 요청받으면, 해당 호스트에게 객체를 보내어 응답한다. 서버는 항상 동작하므로 클라이언트는 서버 주소로 패킷을 보내서 항상 서버에 연결할 수 있다.
 
@@ -29,7 +29,7 @@ tags: [Network]
 **프로세스와 컴퓨터 네트워크 사이의 인터페이스**<br>
 프로세스는 **소켓(socket)**을 통해 네트워크로 메시지를 보내고 받는다. 프로세스와 소켓의 이해를 돕기 위해 프로세스틑 집(house), 소켓은 출입구(door)로 비유해보자. 송신프로세스가 메시지를 만들어 출입구로 나오면 송신 프로세스의 출입구 뒤편에 전송구조가 있다고 생각하고, 메시지가 목적지 호스트에 도착하면 메시지는 수신 프로세스의 출입구를 거치고 수신 프로세스는 메시지를 처리한다.
 
-![](https://taeho0304.github.io/assets/img/NW/application/principle/mailsystem.png)
+![](https://taeho0304.github.io/assets/img/NW/application/principle/process_socket.png)
 
 소켓은 호스트의 애플리케이션 계층과 트랜스포트 계층간의 인터페이스다. 또한 소켓은 네트워크 애플리케이션이 인터넷에 만든 프로그래밍 인터페이스이므로, 애플리케이션과 네트워크 사이의 API(Appllication Programming Interface) 라고도 한다.
 
