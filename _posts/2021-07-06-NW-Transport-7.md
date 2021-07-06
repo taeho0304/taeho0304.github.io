@@ -1,14 +1,14 @@
 ---
 layout: post
-title: 트랜스포트 계층 [ 혼잡제어 ]
+title: 트랜스포트 계층 [ 혼잡 제어 ]
 description: >
-  [컴퓨터 네트워킹 하향식 접근 정리] 프랜스포트 계층: 혼잡제어  <br>
+  [컴퓨터 네트워킹 하향식 접근 정리] 프랜스포트 계층: 혼잡 제어  <br>
   참고 : http://www.kocw.net/home/search/kemView.do?kemId=1312397
 
 tags: [Network]
 ---
 
-## 트랜스포트 계층 [ 혼잡제어]
+## 트랜스포트 계층 [ 혼잡 제어]
 
 ### TCP 혼잡제어
 
