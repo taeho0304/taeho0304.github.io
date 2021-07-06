@@ -16,7 +16,7 @@ tags: [Network]
 
 ### TCP 송신자가 트래픽을 보내는 전송률 제어 방법
 
-TCP 연결의 양 끝 각 호스트들은 수신 버퍼, 송신버퍼 그리고 몇가지의 변수(LastByteRead, rwnd 등)로 구성된다. 송신측에서 동작하는 TCP 혼잡제어 매커니즘은 추가적인 변수인 **혼합 윈도우(congestion window)**를 기록한다. cwnd(congestion window size, 지금 네트워크가 받아들일 수 있는 데이터 양)로 표시되는 혼잡 윈도우는 TCP 송신자가 네트워크로 트래픽을 전송할 수 있는 비율을 제한하도록 한다. 대략적으로 매 왕복시간(RTT)의 시작 때, 송신자는 앞에서 cwnd바이트만큼의 데이터를 전송할 수 있고, RTT가 끝나는 시점에 데이터에 대한 확인응답을 수신한다. 그러므로 송신자의 송신율은 대략 cwnd/RTT 바이트/초이다. cwnd의 값을 조절하여, 송신자는 링크에 데이터를 전송하는 비율을 조절할 수 있다.
+TCP 연결의 양 끝 각 호스트들은 수신 버퍼, 송신버퍼 그리고 몇가지의 변수(LastByteRead, rwnd 등)로 구성된다. 송신측에서 동작하는 TCP 혼잡제어 매커니즘은 추가적인 변수인 혼합 윈도우(congestion window)를 기록한다. **cwnd(congestion window size, 지금 네트워크가 받아들일 수 있는 데이터 양)**로 표시되는 혼잡 윈도우는 TCP 송신자가 네트워크로 트래픽을 전송할 수 있는 비율을 제한하도록 한다. 대략적으로 매 왕복시간(RTT)의 시작 때, 송신자는 앞에서 cwnd바이트만큼의 데이터를 전송할 수 있고, RTT가 끝나는 시점에 데이터에 대한 확인응답을 수신한다. 그러므로 송신자의 송신율은 대략 cwnd/RTT 바이트/초이다. cwnd의 값을 조절하여, 송신자는 링크에 데이터를 전송하는 비율을 조절할 수 있다.
 
 ![](https://taeho0304.github.io/assets/img/NW/transport/congestioncontrol/cwnd_control.PNG)
 
