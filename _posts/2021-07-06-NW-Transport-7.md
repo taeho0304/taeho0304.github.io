@@ -24,6 +24,8 @@ Cwnd의 조작은 다음과 같이 이루어진다. 세그먼트를 보내고 �
 
 cwnd를 계속해서 늘려가다보면 어느순간 네트워크에 문제가 발생한다. 네트워크에 문제가 생겨 ACK가 돌아오지 않는다면 cwnd를 절반으로 줄여준 뒤 다시 additive increase를 시작한다. 이 cnwd를 절반으로 줄여주는 작업을 multiplicative decrease 라고 한다.
 
+<br><br>
+
 ### Slow Start & Congestion Avoidance & Fast Recovery
 
 ![](https://taeho0304.github.io/assets/img/NW/transport/congestioncontrol/slowstart.PNG)
