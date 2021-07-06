@@ -32,6 +32,6 @@ cwnd를 계속해서 늘려가다보면 어느순간 네트워크에 문제가 �
 
 ![](https://taeho0304.github.io/assets/img/NW/transport/congestioncontrol/congestionavoidance.PNG)
 
-혼잡 회피에서 패킷 loss 가 발생했을때의 동작은 TCP의 버전과 무슨 유형의 패킷손실(3 duplicate ACK, timeout)이 발생했는지에 따라 달라진다. TCP Tahoe라 불리는 초기 TCP 버전은 timeout나 duplicate ACK가 발생했을때를 구분하지 않고 무조건 손실이 발생하면 무조건 혼잡 윈도우를 1MSS로 줄이고, slow start 단계로 들어간다. 새로운 TCP 버전인 TCP Reno는 3 duplicate ACK일 때와 timeout일 때를 구분하여 동작한다. timeout이 발생했을 때는 Taeho와 같이 cwnd를 1MMS로 시작해 slow start 단계를 진행하지만 3 duplicate ACK일때는 cwnd는 cwnd/2로 값이 변경되고 additive increase로 cwnd를 증가시킨다.
+혼잡 회피에서 패킷 loss 가 발생했을때의 동작은 TCP의 버전과 무슨 유형의 패킷손실(3 duplicate ACK, timeout)이 발생했는지에 따라 달라진다. TCP Tahoe라 불리는 초기 TCP 버전은 timeout나 duplicate ACK가 발생했을때를 구분하지 않고 무조건 손실이 발생하면 무조건 혼잡 윈도우를 1MSS로 줄이고, slow start 단계로 들어간다. 새로운 TCP 버전인 TCP Reno는 3 duplicate ACK일 때와 timeout일 때를 구분하여 동작한다. timeout이 발생했을 때는 Taeho와 같이 cwnd를 1MMS로 시작해 slow start 단계를 진행하지만 3 duplicate ACK일때는 cwnd는 cwnd/2로 값이 변경되고 additive increase로 cwnd를 증가시킨다. 전체 프로세스는 아래와 같다.
 
 ![](https://taeho0304.github.io/assets/img/NW/transport/congestioncontrol/congestioncontrol.PNG)
