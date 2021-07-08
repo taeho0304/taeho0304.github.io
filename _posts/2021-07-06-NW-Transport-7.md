@@ -20,7 +20,7 @@ TCP 연결의 양 끝 각 호스트들은 수신 버퍼, 송신버퍼 그리고 
 
 ![](https://taeho0304.github.io/assets/img/NW/transport/congestioncontrol/cwnd_control.PNG)
 
-Cwnd의 조작은 다음과 같이 이루어진다. 세그먼트를 보내고 그에 대한 피드백(ACK)을 잘 받는다면 그 세그먼트 사이즈만큼 cwnd를 늘려준다. 보통 세그먼트 사이즈는 MSS(Maxium Segment Size)단위로 전송한다. 이렇게 cwnd를 늘려나가는 방법을 additive increase 라고 한다.
+cwnd의 조작은 다음과 같이 이루어진다. 세그먼트를 보내고 그에 대한 피드백(ACK)을 잘 받는다면 그 세그먼트 사이즈만큼 cwnd를 늘려준다. 보통 세그먼트 사이즈는 MSS(Maxium Segment Size)단위로 전송한다. 이렇게 cwnd를 늘려나가는 방법을 additive increase 라고 한다.
 
 cwnd를 계속해서 늘려가다보면 어느순간 네트워크에 문제가 발생한다. 네트워크에 문제가 생겨 ACK가 돌아오지 않는다면 cwnd를 절반으로 줄여준 뒤 다시 additive increase를 시작한다. 이 cnwd를 절반으로 줄여주는 작업을 multiplicative decrease 라고 한다.
 
