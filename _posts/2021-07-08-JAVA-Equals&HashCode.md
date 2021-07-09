@@ -1,6 +1,6 @@
 ---
 layout: post
-title: [JAVA] equals와 hashCode 함수
+title: equals와 hashCode 함수 [JAVA]
 description: >
   [JAVA] equals와 hashCode 함수
   참고 
@@ -78,12 +78,137 @@ public native int hashCode();
 
 ### equals()와 hashCode()의 관계
 
-일반적으로 equals()를 오버라이딩하면 hashCode()또한 같이 어버라이딩하여 **'동일한 객체에는 동일한 해시 코드가 있어야한다.'**는 관계를 지켜야한다.
+일반적으로 equals()를 오버라이딩하면 hashCode()또한 같이 어버라이딩하여 **'동일한 객체에는 동일한 해시 코드가 있어야한다'**는 관계를 지켜야한다.
 
 이러한 equals와 hashCode의 관계를 정의하면 다음과 같다.
 
-Java 프로그램을 실행하는 동안 equals에 사용된 정보가 수정되지 않았다면, hashCode는 항상 동일한 정수값을 반환해야 한다. (Java의 프로그램을 실행할 때 마다 달라지는 것은 상관이 없다.)
+1. Java 응용 프로그램을 실행하는 동안 equals에 사용된 정보가 수정되지 않았다면, hashCode는 항상 동일한 정수값을 반환해야 한다.
 
-두 객체가 equals()에 의해 동일하다면, 두 객체의 hashCode() 값도 일치해야 한다.
+2. 두 객체가 equals()에 의해 동일하다면, 두 객체의 hashCode() 값도 일치해야 한다.
 
-두 객체가 equals()에 의해 동일하지 않다면, 두 객체의 hashCode() 값은 일치하지 않아도 된다.
+3. 두 객체가 equals()에 의해 동일하지 않다면, 두 객체의 hashCode() 값은 일치하지 않아도 된다.
+
+### hashCode() 및 equals()의 Override
+
+#### 기본동작
+
+만약 애플리케이션에 아래와 같은 Employee 클래스가 있다고 하자.
+
+###### Employee.java
+
+```java
+public class Employee{
+    private Integer id;
+    private String firstname;
+    private String lastName;
+    private String department;
+
+    //Setters and Getters
+}
+```
+
+만약 아래와 같이 동일한 id 값을 갖는 2개의 Employ를 서로 다른 처리 과정에 의해 얻었다고 하자. 2개의 Employee는 동일한 id를 갖기 때문에 equals 연산을 한다면 true를 반환해야 한다. 하지만 아래의 예제는 깊게 볼 필요도 없이 false를 반환할 것이다.
+
+```java
+public class EqualsTest {
+    public static void main(String[] args) {
+        Employee e1 = new Employee();
+        Employee e2 = new Employee();
+
+        e1.setId(100);
+        e2.setId(100);
+
+        System.out.println(e1.equals(e2));  //false
+    }
+}
+```
+
+올바른 동작을 얻기 위해서는 Employee 클래스내에 equals() 메소드를 오버라이드 해야 한다.
+
+```java
+public boolean equals(Object o) {
+    if(o == null) {
+        return false;
+    }
+    if (o == this) {
+        return true;
+    }
+    if (getClass() != o.getClass()) {
+        return false;
+    }
+
+    Employee e = (Employee) o;
+    return (this.getId() == e.getId());
+}
+```
+
+위와 같이 equals() 메소드를 오버라이드하면 eqauls() 메서드가 원하는대로 수행된다.
+
+하지만 Employee를 HashSet과 같은 자료구조에 저장하면 또 다른 문제가 발생한다.
+
+```java
+import java.util.HashSet;
+import java.util.Set;
+
+public class EqualsTest
+{
+    public static void main(String[] args)
+    {
+        Employee e1 = new Employee();
+        Employee e2 = new Employee();
+
+        e1.setId(100);
+        e2.setId(100);
+
+        //Prints 'true'
+        System.out.println(e1.equals(e2));
+
+        Set<Employee> employees = new HashSet<Employee>();
+        employees.add(e1);
+        employees.add(e2);
+
+        System.out.println(employees);  // [study.Employee@2a139a55, study.Employee@15db9742]
+    }
+}
+```
+
+hashCode() 메소드는 해당 메모리 주소값을 이용해 정수값을 반환한다. 그렇기 때문에 위의 e1과 e2는 다른 해시값을 가져 HashSet에 2개의 객체가 서로 다른 위치에 저장된다. 따라서 equals()를 수정하면 hashCode()또한 수정이 필요하다.
+
+```java
+@Override
+public int hashCode()
+{
+    final int PRIME = 31;
+    int result = 1;
+    result = PRIME * result + getId();
+    return result;
+}
+```
+
+위와 같이 Employee 클래스내에 hashCode() 메서드를 오버라이드 작업을 수행하면 동일한 객체 하나만 출력하는 것을 볼 수 있다.
+
+```java
+import java.util.HashSet;
+import java.util.Set;
+
+public class EqualsTest
+{
+    public static void main(String[] args)
+    {
+        Employee e1 = new Employee();
+        Employee e2 = new Employee();
+
+        e1.setId(100);
+        e2.setId(100);
+
+        //Prints 'true'
+        System.out.println(e1.equals(e2));
+
+        Set<Employee> employees = new HashSet<Employee>();
+        employees.add(e1);
+        employees.add(e2);
+
+        System.out.println(employees); // [study.Employee@83]
+    }
+}
+```

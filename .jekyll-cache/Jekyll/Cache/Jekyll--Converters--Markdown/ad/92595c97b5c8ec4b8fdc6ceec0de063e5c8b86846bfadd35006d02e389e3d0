@@ -1,0 +1,80 @@
+I"v<h2 id="equals와-hashcode-함수">equals와 hashCode 함수</h2>
+
+<h2 id="equals와-hashcode-함수-1">equals와 hashCode 함수</h2>
+
+<p>equals()와 hashCode() 메소드는 모든 Java 객체의 부모 객체인 Object 클래스에 정의되어 있다. 그렇기 때문에 Java의 모든 객체는 Object 클래스에 정의된 equals와 hashCode 함수를 상속받고 있다.</p>
+
+<h3 id="equals란">equals()란?</h3>
+
+<p>Object 클래스에 정의된 equals 메소드는 2개의 객체가 동일한지 검사하기 위해 사용된다. eqauls가 구현된 방법은 2개의 객체가 참조하는 것이 동일한지를 확인하는 것이다.</p>
+
+<p>즉, 2개의 객체가 가리키는 곳이 동일한 메모리 주소일 경우에만 동일한 객체가 된다.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//Object의 기본 equals 메서드</span>
+<span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">equals</span><span class="o">(</span><span class="nc">Object</span> <span class="n">obj</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="o">(</span><span class="k">this</span> <span class="o">==</span> <span class="n">obj</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>equals() 메서드는 최상위 클래스인 Object에 포함되어 있기 때문에 모든 하위 클래스에서 재정의해 사용할 수 있다. 예를들어 동일한 문자열을 2개 생성하면 2개의 문자열은 서로 다른 메모리 상에 할당된다. 하지만 equlas()함수를 사용해 문자열을 비교하면 true 값이 나오는 것을 확인할 수 있다. 이는 하위 클래스인 String 클래스에서 equals 메소드를 오버라이딩하여 값를 비교하는 코드를 추가했기 때문이다.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">String</span> <span class="n">s1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">String</span><span class="o">(</span><span class="s">"equalsTest"</span><span class="o">);</span>
+<span class="nc">String</span> <span class="n">s2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">String</span><span class="o">(</span><span class="s">"equalsTest"</span><span class="o">);</span>
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">s1</span> <span class="o">==</span> <span class="n">s2</span><span class="o">);</span> <span class="c1">// false</span>
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">s1</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">s2</span><span class="o">));</span> <span class="c1">// true;</span>
+
+<span class="c1">//</span>
+<span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">equals</span><span class="o">(</span><span class="nc">Object</span> <span class="n">anObject</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="k">this</span> <span class="o">==</span> <span class="n">anObject</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">anObject</span> <span class="k">instanceof</span> <span class="nc">String</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">String</span> <span class="n">anotherString</span> <span class="o">=</span> <span class="o">(</span><span class="nc">String</span><span class="o">)</span><span class="n">anObject</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">n</span> <span class="o">==</span> <span class="n">anotherString</span><span class="o">.</span><span class="na">value</span><span class="o">.</span><span class="na">length</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">char</span> <span class="n">v1</span><span class="o">[]</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
+            <span class="kt">char</span> <span class="n">v2</span><span class="o">[]</span> <span class="o">=</span> <span class="n">anotherString</span><span class="o">.</span><span class="na">value</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">n</span><span class="o">--</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">v1</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">!=</span> <span class="n">v2</span><span class="o">[</span><span class="n">i</span><span class="o">])</span>
+                    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+                <span class="n">i</span><span class="o">++;</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="hashcode란">hashCode()란?</h3>
+
+<p>런타임에서 개체의 고유 한 정수 값을 반환합니다. 기본적으로 정수 값은 대부분 힙에있는 개체의 메모리 주소에서 파생됩니다 (항상 필수는 아님).</p>
+
+<p>hashCode는 HashTable과 같은 자료구조를 사용할 때 데이터가 저장되는 위치를 결정하기 위해 사용된다.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">native</span> <span class="kt">int</span> <span class="nf">hashCode</span><span class="o">();</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>native method : OS의 method (주로 C언어로 구현)</p>
+</blockquote>
+
+<blockquote>
+  <p>이미 작성되어 있는 method(OS가 가지고 있는 method)를 사용해 내용이 없다.</p>
+
+  <p>-&gt; OS가 가지고 있는 C언어로 작성된 메서드를 마치 자바로 작성된 메서드인것처럼 사용가능 (∽JNI)</p>
+</blockquote>
+
+<h3 id="equals와-hashcode의-관계">equals()와 hashCode()의 관계</h3>
+
+<p>일반적으로 equals()를 오버라이딩하면 hashCode()또한 같이 어버라이딩하여 <strong>‘동일한 객체에는 동일한 해시 코드가 있어야한다’</strong>는 관계를 지켜야한다.</p>
+
+<p>이러한 equals와 hashCode의 관계를 정의하면 다음과 같다.</p>
+
+<p>Java 프로그램을 실행하는 동안 equals에 사용된 정보가 수정되지 않았다면, hashCode는 항상 동일한 정수값을 반환해야 한다. (Java의 프로그램을 실행할 때 마다 달라지는 것은 상관이 없다.)</p>
+
+<p>두 객체가 equals()에 의해 동일하다면, 두 객체의 hashCode() 값도 일치해야 한다.</p>
+
+<p>두 객체가 equals()에 의해 동일하지 않다면, 두 객체의 hashCode() 값은 일치하지 않아도 된다.</p>
+:ET
