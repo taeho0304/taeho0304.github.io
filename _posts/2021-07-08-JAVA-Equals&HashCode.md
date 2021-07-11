@@ -2,8 +2,8 @@
 layout: post
 title: equals와 hashCode 함수 [JAVA]
 description: >
-  [JAVA] equals와 hashCode 함수
-  참고 
+  [JAVA] equals와 hashCode 함수 <br>
+  참고 <br>
   - https://howtodoinjava.com/java/basics/java-hashcode-equals-methods/ <br>
   - https://www.youtube.com/watch?v=GfYg3imRZsc
 tags: [JAVA]
