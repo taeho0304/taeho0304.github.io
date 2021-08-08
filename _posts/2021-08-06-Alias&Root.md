@@ -8,6 +8,8 @@ description: >
 tags: [NGINX]
 ---
 
+## Location 속성 root vs alias [NGINX]
+
 ## root vs alias
 
 nginx 환경설정에서 location 속성을 이용해 디렉터리 접근 경로를 설정할 때 주로 alias와 root 키워드를 사용한다.
@@ -19,7 +21,7 @@ nginx 환경설정에서 location 속성을 이용해 디렉터리 접근 경로
 
 root는 location으로 넘어온 부분을 root로 설정한 경로에 추가한다.
 
-```
+```bash
 location /static/ {
     root /var/www/app/static/;
     autoindex off;
@@ -33,7 +35,7 @@ location /static/ {
 
 alias는 location으로 넘어온 부분을 제거하고, alias로 설정한 경로만 이용한다.
 
-```
+```bash
 location /static/ {
     alias /var/www/app/static/;
     autoindex off;
