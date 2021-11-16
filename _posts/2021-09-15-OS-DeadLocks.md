@@ -4,8 +4,8 @@ title: DeadLocks [OS]
 description: >
   [공룡책 정리] 데드락의 이해: Chapter 8. Deadlocks (Part 1)
   참고 <br>
-  - https://www.inflearn.com/course/%EC%9A%B4%EC%98%81%EC%B2%B4%EC%A0%9C-%EA%B3%B5%EB%A3%A1%EC%B1%85-%EC%A0%84%EA%B3%B5%EA%B0%95%EC%9D%98/lecture/65282?tab=curriculum
-  -https://www.youtube.com/watch?v=FXzBRD3CPlQ
+  - <https://www.inflearn.com/course/%EC%9A%B4%EC%98%81%EC%B2%B4%EC%A0%9C-%EA%B3%B5%EB%A3%A1%EC%B1%85-%EC%A0%84%EA%B3%B5%EA%B0%95%EC%9D%98/lecture/65282?tab=curriculum>
+  - <https://www.youtube.com/watch?v=FXzBRD3CPlQ>
 tags: [OS]
 ---
 
