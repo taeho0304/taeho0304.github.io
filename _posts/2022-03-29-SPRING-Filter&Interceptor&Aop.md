@@ -33,7 +33,7 @@ tags: [SPRING]
 
 ### Filter, Interceptor, AOP의 흐름
 
-![](https://taeho0304.github.io/assets/img/SPRING/Filter&Interceptor&AOP/flow.JPG)
+![](https://taeho0304.github.io/assets/img/SPRING/Filter&Interceptor&AOP/flow.jpg)
 
 ㆍInterceptor와 Filter는 Servlet 단위에서 실행된다. 반면 AOP는 메소드 앞에 Proxy패턴의 형태로 실행된다.
 
@@ -50,7 +50,7 @@ tags: [SPRING]
 
 ### Filter, Interceptor 체인
 
-![](https://taeho0304.github.io/assets/img/SPRING/Filter&Interceptor&AOP/chain.JPG)
+![](https://taeho0304.github.io/assets/img/SPRING/Filter&Interceptor&AOP/chain.jpg)
 
 ### Filter
 
@@ -98,7 +98,7 @@ tags: [SPRING]
 
 #### Interceptor 메서드
 
-![](https://taeho0304.github.io/assets/img/SPRING/Filter&Interceptor&AOP/interceptor-flow.PNG)
+![](https://taeho0304.github.io/assets/img/SPRING/Filter&Interceptor&AOP/interceptor-flow.png)
 
 * (1) preHandler()
   
@@ -120,7 +120,7 @@ afterCompletion 메소드는 이름 그대로 모든 뷰에서 최종 결과를 
 
 #### 예외 발생
 
-![](https://taeho0304.github.io/assets/img/SPRING/Filter&Interceptor&AOP/exception.PNG)
+![](https://taeho0304.github.io/assets/img/SPRING/Filter&Interceptor&AOP/exception.png)
 
 * preHandle은 컨트롤러 호출 전에 호출된다. 
 * postHandler은 컨트롤러에서 예외가 발생하면 postHandler은 호출되지 않는다.
