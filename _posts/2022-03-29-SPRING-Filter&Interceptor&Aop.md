@@ -3,17 +3,16 @@ layout: post
 title: Filter, Interceptor [Spring]
 
 description: >
-  멀티모듈 개념 정리
   참고 <br>
-  - 기록은 재산이다 - (Spring)Filter와 Interceptor의 차이 : <https://supawer0728.github.io/2018/04/04/spring-filter-interceptor/>
-  - 갓대희의 작은공간 - [Spring] Filter, Interceptor, AOP 차이 및 정리 : <https://goddaehee.tistory.com/154>
-  - catsbi's DLog - 7. 로그인 처리2 - 필터, 인터셉터 : <https://catsbi.oopy.io/9ed2ec2b-b8f3-43f7-99fa-32f69f059171
+  - 기록은 재산이다 - (Spring)Filter와 Interceptor의 차이 : <https://supawer0728.github.io/2018/04/04/spring-filter-interceptor/><br>
+  - 갓대희의 작은공간 - [Spring] Filter, Interceptor, AOP 차이 및 정리 : <https://goddaehee.tistory.com/154><br>
+  - catsbi's DLog - 7. 로그인 처리2 - 필터, 인터셉터 : <https://catsbi.oopy.io/9ed2ec2b-b8f3-43f7-99fa-32f69f059171>
 tags: [SPRING]
 ---
 
 ## Filter, Interceptor, AOP 차이 개념 [Spring]
 
-## Filter, Interceptor, AOP 차이 개념 [Spring]
+## Filter, Interceptor, AOP 차이 개념 [Spring]<br>
 
 ### 공통 프로세스에 대한 고민
 
@@ -44,13 +43,16 @@ tags: [SPRING]
 
 1. 서버를 실행시켜 서블릿이 올라오는 동안에 init이 실행되고, 그 후 doFilter가 실행된다. 
 2. 컨트롤러에 들어가기 전 preHandler가 실행된다
-3. 컨트롤러에서 나와 postHandler, after Completion, doFilter 순으로 진행이 된다.
+3. 컨트롤러에서 나와 postHandler, afterCompletion, doFilter 순으로 진행이 된다.
 4. 서블릿 종료 시 destroy가 실행된다.
 
 
 ### Filter, Interceptor 체인
 
 ![](https://taeho0304.github.io/assets/img/SPRING/Filter&Interceptor&AOP/chain.jpg)
+
+* 둘 다 자유롭게 필터 및 인터셉터를 추가할 수 있다. 
+* setOrder() 함수를 이용해 체인의 실행순서를 지정할 수 있다.
 
 ### Filter
 
@@ -60,8 +62,9 @@ tags: [SPRING]
 
 또한 자원의 처리가 끝난 후 응답내용에 대해서도 변경하는 처리를 할 수가 있다. 
 
-일반적으로 인코딩 변환 처리, XSS방어 등의 요청에 대한 처리, 요청 등에 사용된다.
+일반적으로 인코딩 변환 처리, XSS방어 등의 요청에 대한 처리등에 사용된다.
 
+#### Filter Interface 함수
 
 * init(): 필터 초기화 메서드로 서블릿 컨테이너가 생성될 때 호출된다.
 * doFilter(): 고객의 요청이 올 때마다 해당 메서드가 호출된다. (전/후 처리)
@@ -95,6 +98,8 @@ tags: [SPRING]
 스프링의 모든 빈 객체에 접근할 수 있다.
 
 인터셉터는 여러 개를 사용할 수 있고 로그인 체크, 권한체크, 프로그램 실행시간 계산작업 로그확인 등의 업무처리에 주로 사용된다.
+
+Interceptor를 구현하는 방법은 2가지가 있는데, HandlerInterceptor 인터페이스를 구현하는 방법과 HandlerInterceptorAdapter 클래스를 상속 받는 방법이 있다.
 
 #### Interceptor 메서드
 
@@ -144,9 +149,7 @@ afterCompletion 메소드는 이름 그대로 모든 뷰에서 최종 결과를 
 
 #### AOP
 
-OOP를 보완하기 위해 나온 개념 
-
-객체 지향의 프로그래밍을 했을 때 중복을 줄일 수 없는 부분을 줄이기 위해 종단면(관점)에서 바라보고 처리한다.
+객체 지향의 프로그래밍을 했을 때 중복을 줄일 수 없는 부분을 줄이기 위해 종단면(관점)에서 바라보고 처리한다. 흩어진 관심사를 Aspect로 모듈화하고 핵심적인 비즈니스 로직에서 분리하여 재사용하겠다는 것이 AOP의 취지다.
 
 주로 '로깅', '트랜잭션', '에러 처리'등 비즈니스단의 메서드에서 조금 더 세밀하게 조정하고 싶을 때 사용한다.
 
@@ -157,6 +160,21 @@ AOP의 Advice와 HandlerInterceptor의 가장 큰 차이는 파라미터의 차�
 Advice의 경우 JoinPoint나 ProceedingJoinPoint 등을 활용해서 호출한다.
 
 반면 HandlerInterceptor는 Filter와 유사하게 HttpServletRequest, HttpServletResponse를 파라미터로 사용한다.
+
+#### 주요 개념
+
+* Aspect : 위에서 설명한 흩어진 관심사를 모듈화 한 것. 주로 부가기능을 모듈화함.
+* Target : Aspect를 적용하는 곳 (클래스, 메서드 .. )
+* Advice : 실질적으로 어떤 일을 해야할 지에 대한 것, 실질적인 부가기능을 담은 구현체
+* JointPoint : Advice가 적용될 위치, 끼어들 수 있는 지점. 메서드 진입 지점, 생성자 호출 시점, 필드에서 값을 꺼내올 때 등 다양한 시점에 적용가능
+* PointCut : JointPoint의 상세한 스펙을 정의한 것. 'A란 메서드의 진입 시점에 호출할 것'과 같이 더욱 구체적으로 Advice가 실행될 지점을 정할 수 있음
+ 
+
+#### 스프링 AOP 특징
+
+* 프록시 패턴 기반의 AOP 구현체, 프록시 객체를 쓰는 이유는 접근 제어 및 부가기능을 추가하기 위함이다.
+* 스프링 빈에만 AOP를 적용 가능하다.
+* 모든 AOP 기능을 제공하는 것이 아닌 스프링 IoC와 연동하여 엔터프라이즈 애플리케이션에서 가장 흔한 문제(중복코드, 프록시 클래스 작성의 번거로움, 객체들 간 관계 복잡도 증가 ...)에 대한 해결책을 지원하는 것이 목적이다.
 
 #### AOP의 포인트컷
 
