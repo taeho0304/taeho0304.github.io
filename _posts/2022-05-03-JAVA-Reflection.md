@@ -4,7 +4,8 @@ title: Java Reflection
 
 description: >
   참고 <br>
-  - 스프링핵심원리 고급편 (김영한) : <https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81-%ED%95%B5%EC%8B%AC-%EC%9B%90%EB%A6%AC-%EA%B3%A0%EA%B8%89%ED%8E%B8>
+  - 스프링핵심원리 고급편 (김영한) : <https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81-%ED%95%B5%EC%8B%AC-%EC%9B%90%EB%A6%AC-%EA%B3%A0%EA%B8%89%ED%8E%B8><br>
+  - Reflection이란? : <https://velog.io/@yeon/Reflection%EC%9D%B4%EB%9E%80><br>
 tags: [ETC]
 ---
 ## Reflection이란? [JAVA]
