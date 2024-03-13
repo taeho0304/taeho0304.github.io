@@ -2,7 +2,7 @@
 layout: post
 title: 이펙티브 자바 - item 10. equals는 일반 규약을 지켜 재정의하라 [JAVA]
 description: >
-  item 6. 불필요한 객체 생성을 피하라
+  item 10. equals는 일반 규약을 지켜 재정의하라
 tags: [JAVA]
 ---
 
